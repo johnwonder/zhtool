@@ -39,3 +39,13 @@ func TestStrIsEmpty(t *testing.T) {
 	assert.Equal(t, false, StrIsEmpty("\t"))
 
 }
+
+func TestReverse(t *testing.T) {
+	assert.Equal(t, "dcba", Reverse("abcd"))
+	assert.Equal(t, "谁是我", Reverse("我是谁"))
+
+	assert.Equal(t, "dcba谁是我", Reverse("我是谁abcd"))
+
+	assert.Equal(t, "sss", Reverse(""))
+
+}
