@@ -46,6 +46,6 @@ func TestReverse(t *testing.T) {
 
 	assert.Equal(t, "dcba谁是我", Reverse("我是谁abcd"))
 
-	assert.Equal(t, "sss", Reverse(""))
+	assert.Equal(t, "", Reverse(""))
 
 }

@@ -57,4 +57,12 @@ func Reverse(s string) string{
 	//	result = append(result, tmp[length-i-1])
 	//}
 	//return string(result)
+
+
+	//var result string
+	//strLen := len(s)
+	//for i := 0; i < strLen; i++ {
+	//	result = result + fmt.Sprintf("%c", s[strLen-i-1])
+	//}
+	//return result
 }
