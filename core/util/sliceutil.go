@@ -6,6 +6,7 @@ func FindFirstMatchStr(s1 []string,s2 []string) string {
 	}
 
 	//https://www.cnblogs.com/liuxingxing/p/14437084.html
+	//https://github.com/wxnacy/wgo/blob/a17b9d43fb9464b43937bd93db10239fe87fcd9b/arrays/contains.go#L25
 	set := make(map[string]struct{})
 	for _, value := range s2{
 		set[value] = struct{}{}
@@ -17,4 +18,15 @@ func FindFirstMatchStr(s1 []string,s2 []string) string {
 		}
 	}
 	return ""
+}
+
+func ContainsStr(arr []string, val string) (index int) {
+	index = -1
+	for i := 0; i < len(arr); i++ {
+		if arr[i] == val {
+			index = i
+			return
+		}
+	}
+	return
 }

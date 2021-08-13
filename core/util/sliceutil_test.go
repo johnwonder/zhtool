@@ -12,3 +12,11 @@ func TestFindFirstMatchStr(t *testing.T) {
 	b := []string{"5","6","4","3"}
 	assert.Equal(t, "3", FindFirstMatchStr(a,b))
 }
+
+func TestContainsStr(t *testing.T) {
+	b := []string{"5","6","4","3"}
+	assert.Equal(t, 0, ContainsStr(b,"5"))
+	assert.Equal(t, -1, ContainsStr(b,"10"))
+
+
+}
