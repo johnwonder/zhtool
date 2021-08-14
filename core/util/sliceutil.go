@@ -21,6 +21,7 @@ func FindFirstMatchStr(s1 []string,s2 []string) string {
 }
 
 func ContainsStr(arr []string, val string) (index int) {
+	//https://wxnacy.com/2018/11/20/go-in-array/
 	index = -1
 	for i := 0; i < len(arr); i++ {
 		if arr[i] == val {
