@@ -2,7 +2,9 @@ package util
 
 import (
 	"fmt"
+	"strings"
 	"testing"
+	"unicode"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -48,4 +50,67 @@ func TestReverse(t *testing.T) {
 
 	assert.Equal(t, "", Reverse(""))
 
+}
+
+func TestReplaceTemplate(t *testing.T) {
+
+	in := "111 {{% tem john %}}"
+	t.Log(strings.TrimSpace(in))
+	t.Log(strings.IndexFunc(strings.TrimSpace(" tem john "), unicode.IsSpace))
+	posStart := strings.Index(in, "{{%")
+	t.Logf("posStart:%v",posStart)
+	posEnd := strings.Index(in[posStart:], "%}}") + posStart
+	t.Logf("posEnd:%v", posEnd)
+
+	//https://www.cnblogs.com/liubiaos/p/9367504.html
+	//https://blog.csdn.net/KimBing/article/details/113584176
+	t.Logf("去除{{%% %%}}后的字符串为：%v",in[posStart+3 : posEnd])
+	assert.Equal(t, "我是johnwonder", ReplaceTemplate("我是{{% tem john %}}wonder","{{%","%}}"))
+
+}
+
+func TestSplitParams(t *testing.T) {
+	name, par := SplitParams("img src=\"/media/spf13.jpg\" title=\"Steve Francia\"")
+
+	t.Log(name)
+	t.Log(par)
+}
+
+func TestTokenize(t *testing.T) {
+
+	name, par := SplitParams("img src=&ldquo;/media/spf13.jpg&rdquo; title=&ldquo;Steve Francia&rdquo;")
+
+	s := "s="
+	t.Log(strings.Index(s,"="))
+	ldquo := "\"ss"
+	t.Log(strings.HasPrefix(ldquo, "\""))
+
+	//img
+	t.Log(name)
+	//src="/media/spf13.jpg" title="Steve Francia"
+	t.Log(par)
+
+
+	first := strings.Fields(par)
+	//输出3
+	t.Logf("长度为:%v",len(first))
+	for i ,v := range first {
+		if i == len(first) {
+			t.Log(v)
+			t.Log(v)
+		}else {
+			t.Logf("索引为:%v,值为%v",i,v)
+		}
+	}
+
+	t.Log(Tokenize(par))
+}
+
+func TestTrimRight(t *testing.T) {
+
+	domain:= "/sss/"
+	//从后面开始截取到 发现么有为止
+	t.Log(strings.TrimRight(domain, "/s"))
+	//从前面开始截取到 发现么有为止
+	t.Log(strings.TrimLeft(domain, "/"))
 }

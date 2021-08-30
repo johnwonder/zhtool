@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"strings"
 	"unicode"
 )
@@ -65,4 +66,81 @@ func Reverse(s string) string{
 	//	result = result + fmt.Sprintf("%c", s[strLen-i-1])
 	//}
 	//return result
+}
+
+func SplitParams(in string) (name string, par2 string) {
+	i := strings.IndexFunc(strings.TrimSpace(in), unicode.IsSpace)
+	if i < 1 {
+		return strings.TrimSpace(in), ""
+	}
+
+	return strings.TrimSpace(in[:i+1]), strings.TrimSpace(in[i+1:])
+}
+
+func Tokenize(in string) interface{} {
+	first := strings.Fields(in)
+	var final = make([]string, 0)
+	var keys = make([]string, 0)
+	inQuote := false
+	start := 0
+
+	for i, v := range first {
+		index := strings.Index(v, "=")
+
+		if !inQuote {
+			if index > 1 {
+				keys = append(keys, v[:index])
+				v = v[index+1:]
+			}
+		}
+
+		if !strings.HasPrefix(v, "&ldquo;") && !inQuote {
+			final = append(final, v)
+		} else if inQuote && strings.HasSuffix(v, "&rdquo;") && !strings.HasSuffix(v, "\\\"") {
+			first[i] = v[:len(v)-7]
+			final = append(final, strings.Join(first[start:i+1], " "))
+			inQuote = false
+		} else if strings.HasPrefix(v, "&ldquo;") && !inQuote {
+			if strings.HasSuffix(v, "&rdquo;") {
+				final = append(final, v[7:len(v)-7])
+			} else {
+				start = i
+				first[i] = v[7:]
+				inQuote = true
+			}
+		}
+
+		// No closing "... just make remainder the final token
+		if inQuote && i == len(first) {
+			final = append(final, first[start:len(first)]...)
+		}
+	}
+
+	if len(keys) > 0 {
+		var m = make(map[string]string)
+		for i, k := range keys {
+			m[k] = final[i]
+		}
+
+		return m
+	}
+
+	return final
+}
+
+func ReplaceTemplate(stringToParse string,tempStrStart string,tempStrEnd string) string {
+	posStart := strings.Index(stringToParse, tempStrStart)
+	if posStart > 0 {
+		posEnd := strings.Index(stringToParse[posStart:], tempStrEnd) + posStart
+		if posEnd > posStart {
+			name, par := SplitParams(stringToParse[posStart+3 : posEnd])
+
+			fmt.Printf("name:%v,par:%v",name,par)
+			//params := Tokenize(par)
+			//var data = &ShortcodeWithPage{Params: params, Page: p}
+			newString := stringToParse[:posStart] + par + stringToParse[posEnd+3:]
+			return newString
+		}
+	}
+	return stringToParse
 }
